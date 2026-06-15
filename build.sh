@@ -16,7 +16,8 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 
-OUTPUT="michigan-medigap-plans-2026.md"
+mkdir -p docs
+OUTPUT="docs/michigan-medigap-plans-2026.md"
 CHECK_ONLY=0
 
 while [[ $# -gt 0 ]]; do
@@ -119,6 +120,7 @@ if [[ $CHECK_ONLY -eq 1 ]]; then
 fi
 
 mv "$tmp" "$OUTPUT"
+chmod 644 "$OUTPUT"
 
 result_lines=$(wc -l < "$OUTPUT")
 result_bytes=$(wc -c < "$OUTPUT")
