@@ -133,6 +133,46 @@
   .legend{display:flex; flex-wrap:wrap; gap:18px; margin-top:16px; font-size:13.5px; color:var(--muted)}
   .legend b{color:var(--ink2)}
 
+  /* 20-year outlook */
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.92em;
+    background:var(--soft); padding:1px 5px; border-radius:5px}
+  .proj-assume{background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:18px 22px; margin:6px 0 22px}
+  .proj-assume h4{margin:0 0 8px; font-size:14px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink2)}
+  .proj-assume p{margin:0 0 10px; color:var(--ink2); font-size:15px}
+  .proj-assume ul{margin:0 0 10px; padding-left:20px}
+  .proj-assume li{margin-bottom:6px; color:var(--ink2); font-size:15px}
+  .proj-caveat{font-size:13.5px; color:var(--muted); border-top:1px solid var(--line); padding-top:11px; margin-bottom:0!important}
+  .proj-controls{display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:0 0 14px}
+  .pc-label{font-size:13.5px; color:var(--muted); font-weight:600; margin-right:2px}
+  .pc-btn{appearance:none; cursor:pointer; font:inherit; font-size:13.5px; font-weight:600;
+    color:var(--ink2); background:var(--surface); border:1px solid var(--line);
+    border-radius:30px; padding:6px 14px}
+  .pc-btn:hover{border-color:var(--accent); color:var(--accent)}
+  .chart-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+  .chart-card{margin:0; background:var(--surface); border:1px solid var(--line);
+    border-radius:14px; box-shadow:var(--shadow); padding:16px 16px 10px}
+  .chart-card figcaption{margin:0 2px 4px}
+  .chart-card h3{margin:0; font-size:16px}
+  .chart-card .src{font-size:12.5px; color:var(--muted)}
+  .chart-host{margin-top:8px}
+  .chart-host svg{display:block; width:100%; height:auto; overflow:visible}
+  .ax-line{stroke:var(--line)} .ax-grid{stroke:var(--line); stroke-dasharray:2 4}
+  .ax-text{fill:var(--muted); font-size:11px; font-family:inherit}
+  .ax-title{fill:var(--ink2); font-size:11.5px; font-weight:600}
+  .ser{fill:none; stroke-width:1.6; opacity:.5; transition:opacity .12s,stroke-width .12s}
+  .ser.hi{opacity:1; stroke-width:3} .ser.dim{opacity:.12}
+  .ser-end{font-size:10.5px; font-weight:700; paint-order:stroke; stroke:#fff; stroke-width:3px}
+  .proj-legend{display:flex; flex-wrap:wrap; gap:7px; margin:18px 0 8px}
+  .lg-chip{display:inline-flex; align-items:center; gap:8px; cursor:pointer; user-select:none;
+    border:1px solid var(--line); background:var(--surface); border-radius:30px;
+    padding:5px 12px 5px 9px; font-size:13px; color:var(--ink2)}
+  .lg-chip .sw{width:11px; height:11px; border-radius:50%; flex:none}
+  .lg-chip .tot{color:var(--muted); font-variant-numeric:tabular-nums}
+  .lg-chip .thin{color:var(--amber); font-weight:700; cursor:help; margin-left:1px}
+  .lg-chip.off{opacity:.4} .lg-chip.off .sw{background:var(--line)!important}
+  .lg-chip:hover{border-color:var(--accent)}
+
   /* Top picks */
   .rank-card{
     background:var(--surface); border:1px solid var(--line); border-radius:16px;
@@ -157,6 +197,7 @@
   .callout b{color:#5a460f}
   .disclaimer{margin-top:40px; padding-top:22px; border-top:1px solid var(--line); color:var(--muted); font-size:13.5px}
   a{color:var(--accent)}
+  @media(max-width:760px){ .chart-grid{grid-template-columns:1fr} }
   @media(max-width:640px){
     h1{font-size:25px} .lede{font-size:16.5px}
     .head-inner{padding:28px 0 20px}
@@ -181,6 +222,7 @@
     <button class="tab active" data-tab="data"><span class="n">01</span>What We Compared</button>
     <button class="tab" data-tab="carriers"><span class="n">02</span>Every Carrier</button>
     <button class="tab" data-tab="picks"><span class="n">03</span>Our Top 3 Picks</button>
+    <button class="tab" data-tab="projection"><span class="n">04</span>20-Year Outlook</button>
   </div>
 </nav>
 
@@ -280,6 +322,46 @@
     <div id="picksList"></div>
 
     <div class="callout"><b>Two strong runners-up:</b> <b>State Farm ($149)</b> is the lowest-priced carrier that still scores excellently — A+ rated with one of the best complaint records — but you generally have to buy through a local State Farm agent. <b>USAA ($179)</b> has the highest financial rating of all (A++) but is only available to military families. Both are worth a quote if either fits.</div>
+  </section>
+
+  <!-- TAB 4 -->
+  <section class="panel" id="projection">
+    <h2>What Plan&nbsp;G Could Cost Over 20&nbsp;Years</h2>
+    <p class="section-note">Today's premium is the <em>starting</em> price. These projections grow each carrier's current 2026 premium forward to age&nbsp;85, so you can compare not just what a plan costs now, but what it may cost over the decades you'll hold it. <b>The left chart is your monthly premium by age; the right is the running total you'll have paid.</b> Use the legend to focus on the carriers you care about.</p>
+
+    <div class="proj-assume">
+      <h4>How these are projected</h4>
+      <p>Each carrier grows at its own estimated annual rate, built from three parts (full method in the <span class="mono">18b</span> section of the printable report):</p>
+      <ul>
+        <li><b>Inflation baseline — <span class="mono">3%/yr</span>:</b> general medical-cost inflation, shared by every carrier.</li>
+        <li><b>Carrier trend:</b> each carrier's own historical filed increases (the "Rate increases by year" on tab&nbsp;2), <em>above or below</em> that 3% baseline. A history of steep hikes adds to growth; a calm history subtracts.</li>
+        <li><b>Attained-age aging — <span class="mono">2.5%/yr</span>:</b> the extra you pay each year simply for getting older. Applied to attained-age plans, reduced for community-rated AARP/UHC, and <b>zero</b> for issue-age Everence (its price is locked to your age at purchase).</li>
+      </ul>
+      <p class="proj-caveat">These are <b>illustrative</b>, not quotes. Real increases are lumpy and unknowable; a carrier with little or no filing history is grown at the Plan&nbsp;G industry average. Carriers whose trend rests on a single filing are marked <b>†</b> in the legend — their long-run rank is low-confidence (a one-off cut or spike can make them look artificially calm or harsh). Ranged premiums use the lowest tier. Don't read three-decimal precision into a 20-year forecast — read the <em>shape</em>: which carriers stay calm and which compound fastest.</p>
+    </div>
+
+    <div class="proj-controls">
+      <span class="pc-label">Show:</span>
+      <button class="pc-btn" data-sel="all">All 27</button>
+      <button class="pc-btn" data-sel="none">None</button>
+      <button class="pc-btn" data-sel="top">Top&nbsp;3 picks</button>
+      <button class="pc-btn" data-sel="cheap">5 cheapest</button>
+    </div>
+
+    <div class="chart-grid">
+      <figure class="chart-card">
+        <figcaption><h3>Monthly premium by age</h3><span class="src">Projected $/month, age&nbsp;65&nbsp;→&nbsp;85</span></figcaption>
+        <div id="chartPremium" class="chart-host"></div>
+      </figure>
+      <figure class="chart-card">
+        <figcaption><h3>Total paid by age</h3><span class="src">Cumulative premiums over the 20&nbsp;years</span></figcaption>
+        <div id="chartCum" class="chart-host"></div>
+      </figure>
+    </div>
+
+    <div id="projLegend" class="proj-legend"></div>
+
+    <div class="callout"><b>The takeaway:</b> two carriers with the same price today can diverge by tens of thousands of dollars over 20&nbsp;years. A calm rate history is worth real money — which is exactly why the top picks weigh it so heavily. Hover or tap any legend chip to trace a single carrier; the <span class="mono">20-yr total</span> on each chip is what that line adds up to.</div>
   </section>
 
   <div class="container disclaimer">
@@ -539,6 +621,95 @@ TOP3.forEach((p,i)=>{
     `</div><div class="rc-body">${body}</div>`;
   pl.appendChild(card);
 });
+
+/* ===== 20-YEAR PROJECTION ===== */
+/* PROJECTION_DATA_START */
+const PROJECTION = {"startAge":65,"horizon":20,"ages":[65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85],"inflation":3,"aging":{"attained":2.5,"community":1.5,"issue":0},"industryDefault":6.5,"topPicks":["Blue Cross Blue Shield of Michigan","Mutual of Omaha","AARP / UnitedHealthcare"],"cheapest5":["Michigan Farm Bureau Health Plans","MedMutual Protect (Medical Mutual of Ohio)","State Farm","Medico Life and Health","Humana"],"carriers":[{"name":"Michigan Farm Bureau Health Plans","color":"hsl(0 64% 46%)","method":"attained","base":113,"histTrend":6.5,"realTrend":3.5,"aging":2.5,"growth":9,"nPts":0,"prem":[113,123,134,146,160,174,190,207,225,245,268,292,318,346,378,412,449,489,533,581,633],"cum":[0,1356,2834,4445,6201,8115,10202,12476,14955,17657,20602,23812,27311,31125,35282,39813,44753,50136,56005,62401,69373],"total20":69373},{"name":"MedMutual Protect (Medical Mutual of Ohio)","color":"hsl(138 64% 46%)","method":"attained","base":148,"histTrend":6.5,"realTrend":3.5,"aging":2.5,"growth":9,"nPts":0,"prem":[148,161,176,192,209,228,248,271,295,321,350,382,416,454,495,539,588,640,698,761,829],"cum":[0,1776,3712,5822,8122,10629,13361,16340,19587,23125,26983,31187,35770,40765,46210,52145,58614,65665,73351,81729,90860],"total20":90860},{"name":"State Farm","color":"hsl(275 64% 46%)","method":"attained","base":149,"histTrend":7.4,"realTrend":4.4,"aging":2.5,"growth":9.9,"nPts":1,"prem":[149,164,180,198,217,239,263,289,317,348,383,421,463,508,559,614,675,742,815,896,984],"cum":[0,1788,3753,5913,8286,10894,13761,16911,20373,24178,28360,32955,38006,43557,49657,56361,63728,71826,80724,90504,101252],"total20":101252},{"name":"Medico Life and Health","color":"hsl(53 64% 46%)","method":"attained","base":151,"histTrend":9.9,"realTrend":6.9,"aging":2.5,"growth":12.4,"nPts":2,"prem":[151,170,191,214,241,271,304,342,385,432,486,546,614,690,776,872,980,1102,1238,1392,1564],"cum":[0,1812,3849,6138,8711,11603,14854,18508,22615,27231,32420,38252,44807,52175,60457,69765,80228,91989,105207,120065,136765],"total20":136765},{"name":"Humana","color":"hsl(190 64% 46%)","method":"attained","base":157,"histTrend":7.2,"realTrend":4.2,"aging":2.5,"growth":9.7,"nPts":2,"prem":[157,172,189,207,227,249,274,300,329,361,396,435,477,523,574,630,691,758,831,912,1000],"cum":[0,1884,3951,6218,8705,11434,14427,17710,21312,25263,29598,34353,39569,45291,51568,58454,66008,74295,83386,93358,104298],"total20":104298},{"name":"McLaren Health Plan","color":"hsl(328 64% 46%)","method":"attained","base":159,"histTrend":11.3,"realTrend":8.3,"aging":2.5,"growth":13.8,"nPts":3,"prem":[159,181,206,234,267,303,345,393,447,509,579,659,750,854,971,1105,1258,1432,1629,1854,2110],"cum":[0,1908,4079,6550,9362,12562,16204,20348,25064,30431,36538,43488,51398,60399,70642,82298,95563,110659,127838,147388,169635],"total20":169635},{"name":"Cigna / HealthSpring","color":"hsl(105 64% 46%)","method":"attained","base":173,"histTrend":8.7,"realTrend":5.7,"aging":2.5,"growth":11.2,"nPts":2,"prem":[173,192,214,238,265,294,327,364,404,450,500,556,618,688,765,850,946,1052,1169,1300,1446],"cum":[0,2076,4385,6952,9806,12980,16510,20435,24800,29654,35051,41053,47727,55148,63401,72577,82782,94130,106748,120780,136383],"total20":136383},{"name":"Health Alliance Plan (HAP)","color":"hsl(243 64% 46%)","method":"attained","base":178,"histTrend":12.9,"realTrend":9.9,"aging":2.5,"growth":15.4,"nPts":1,"prem":[178,205,237,274,316,364,420,485,560,646,746,860,993,1146,1322,1526,1761,2032,2345,2706,3123],"cum":[0,2136,4601,7445,10728,14516,18888,23932,29754,36472,44225,53171,63496,75410,89159,105026,123336,144466,168849,196988,229460],"total20":229460},{"name":"USAA","color":"hsl(20 64% 46%)","method":"attained","base":179,"histTrend":10,"realTrend":7,"aging":2.5,"growth":12.5,"nPts":1,"prem":[179,201,227,255,287,323,363,408,459,517,581,654,736,828,931,1047,1178,1326,1491,1678,1888],"cum":[0,2148,4565,7283,10341,13782,17653,22008,26906,32418,38618,45593,53440,62268,72200,83373,95943,110083,125992,143889,164023],"total20":164023},{"name":"AARP / UnitedHealthcare","color":"hsl(158 64% 46%)","method":"community","base":182,"histTrend":10.9,"realTrend":7.9,"aging":1.5,"growth":12.4,"nPts":4,"prem":[182,205,230,258,290,326,367,412,463,520,584,657,738,829,932,1047,1177,1323,1486,1670,1877],"cum":[0,2184,4638,7396,10496,13978,17892,22290,27233,32787,39028,46042,53924,62781,72734,83919,96488,110612,126484,144320,164364],"total20":164364},{"name":"American Benefit Life","color":"hsl(295 64% 46%)","method":"attained","base":182,"histTrend":9.5,"realTrend":6.5,"aging":2.5,"growth":12,"nPts":1,"prem":[182,204,228,256,286,321,359,402,451,505,565,633,709,794,889,996,1116,1250,1400,1568,1756],"cum":[0,2184,4630,7370,10438,13875,17724,22034,26863,32270,38326,45110,52707,61216,70745,81419,93373,106762,121757,138552,157363],"total20":157363},{"name":"Priority Health","color":"hsl(73 64% 46%)","method":"attained","base":183,"histTrend":11.6,"realTrend":8.6,"aging":2.5,"growth":14.1,"nPts":1,"prem":[183,209,238,272,310,354,404,461,526,600,684,781,891,1017,1160,1324,1510,1723,1966,2243,2560],"cum":[0,2196,4702,7561,10823,14545,18791,23637,29166,35474,42672,50885,60256,70948,83147,97067,112949,131071,151748,175341,202260],"total20":202260},{"name":"Nassau Life","color":"hsl(210 64% 46%)","method":"attained","base":183,"histTrend":-1.7,"realTrend":-4.7,"aging":2.5,"growth":0.8,"nPts":1,"prem":[183,184,186,187,189,190,192,193,195,197,198,200,201,203,205,206,208,210,211,213,215],"cum":[0,2196,4410,6641,8890,11157,13442,15746,18068,20408,22768,25146,27543,29959,32395,34850,37325,39820,42334,44869,47424],"total20":47424},{"name":"AFLAC","color":"hsl(348 64% 46%)","method":"attained","base":190,"histTrend":14.6,"realTrend":11.6,"aging":2.5,"growth":17.1,"nPts":3,"prem":[190,222,261,305,357,418,490,574,672,787,921,1079,1263,1479,1732,2028,2375,2781,3257,3814,4466],"cum":[0,2280,4950,8076,11737,16024,21045,26923,33807,41868,51308,62361,75305,90462,108211,128995,153333,181833,215207,254287,300051],"total20":300051},{"name":"Blue Cross Blue Shield of Michigan","color":"hsl(125 64% 46%)","method":"attained","base":191,"histTrend":6.5,"realTrend":3.5,"aging":2.5,"growth":9,"nPts":2,"prem":[191,208,227,247,270,294,320,349,381,415,452,493,537,586,638,696,758,827,901,982,1070],"cum":[0,2292,4790,7513,10482,13717,17243,21087,25277,29844,34822,40248,46163,52609,59636,67295,75644,84744,94663,105474,117259],"total20":117259},{"name":"Continental Life (Aetna)","color":"hsl(263 64% 46%)","method":"attained","base":197,"histTrend":12.7,"realTrend":9.7,"aging":2.5,"growth":15.2,"nPts":3,"prem":[197,227,261,301,347,399,460,529,610,702,809,931,1072,1235,1422,1638,1887,2173,2502,2882,3319],"cum":[0,2364,5087,8222,11833,15992,20781,26297,32649,39965,48390,58094,69268,82138,96960,114029,133688,156328,182402,212430,247012],"total20":247012},{"name":"Physicians Life","color":"hsl(40 64% 46%)","method":"attained","base":203,"histTrend":6.5,"realTrend":3.5,"aging":2.5,"growth":9,"nPts":0,"prem":[203,221,241,263,287,312,340,371,404,441,481,524,571,622,678,739,806,879,958,1044,1138],"cum":[0,2436,5091,7985,11140,14579,18327,22412,26865,31719,37010,42777,49063,55914,63383,71523,80396,90068,100610,112101,124626],"total20":124626},{"name":"First Health (Aetna)","color":"hsl(178 64% 46%)","method":"attained","base":205,"histTrend":6.5,"realTrend":3.5,"aging":2.5,"growth":9,"nPts":0,"prem":[205,223,244,265,289,315,344,375,408,445,485,529,577,628,685,747,814,887,967,1054,1149],"cum":[0,2460,5141,8064,11250,14722,18507,22633,27130,32032,37375,43198,49546,56465,64007,72228,81188,90955,101601,113205,125854],"total20":125854},{"name":"WoodmenLife","color":"hsl(315 64% 46%)","method":"attained","base":214,"histTrend":14,"realTrend":11,"aging":2.5,"growth":16.5,"nPts":1,"prem":[214,249,290,338,394,459,535,623,726,846,986,1148,1338,1558,1815,2115,2464,2870,3344,3896,4539],"cum":[0,2568,5560,9045,13106,17836,23347,29767,37247,45960,56112,67938,81716,97767,116467,138252,163631,193199,227644,267774,314524],"total20":314524},{"name":"Bankers Life (Washington National)","color":"hsl(93 64% 46%)","method":"attained","base":219,"histTrend":5.4,"realTrend":2.4,"aging":2.5,"growth":7.9,"nPts":1,"prem":[219,236,255,275,297,320,346,373,402,434,468,505,545,588,635,685,739,798,861,929,1002],"cum":[0,2628,5464,8523,11825,15387,19230,23377,27852,32681,37890,43512,49577,56122,63183,70803,79024,87895,97467,107795,118939],"total20":118939},{"name":"Mutual of Omaha","color":"hsl(230 64% 46%)","method":"attained","base":220,"histTrend":8.4,"realTrend":5.4,"aging":2.5,"growth":10.9,"nPts":2,"prem":[220,244,270,300,332,368,408,452,502,556,616,683,757,839,931,1031,1143,1267,1405,1557,1726],"cum":[0,2640,5566,8810,12406,16392,20811,25709,31138,37157,43828,51224,59422,68509,78582,89748,102126,115847,131056,147916,166604],"total20":166604},{"name":"Bankers Fidelity Assurance","color":"hsl(8 64% 46%)","method":"attained","base":226,"histTrend":1,"realTrend":-2,"aging":2.5,"growth":3.5,"nPts":2,"prem":[226,234,242,251,259,268,278,288,298,308,319,330,342,353,366,379,392,406,420,434,450],"cum":[0,2712,5519,8424,11431,14543,17764,21098,24548,28119,31816,35641,39601,43699,47940,52330,56873,61576,66443,71481,76694],"total20":76694},{"name":"Everence Association","color":"hsl(145 64% 46%)","method":"issue","base":230,"histTrend":11.9,"realTrend":8.9,"aging":0,"growth":11.9,"nPts":1,"prem":[230,257,288,322,361,404,452,505,565,633,708,792,887,992,1110,1242,1390,1555,1740,1948,2179],"cum":[0,2760,5848,9304,13172,17499,22341,27760,33824,40609,48201,56697,66204,76842,88746,102067,116973,133653,152317,173203,196574],"total20":196574},{"name":"United American (Globe Life)","color":"hsl(283 64% 46%)","method":"attained","base":253,"histTrend":8.8,"realTrend":5.8,"aging":2.5,"growth":11.3,"nPts":3,"prem":[253,282,313,349,388,431,480,534,594,661,736,819,911,1014,1128,1255,1396,1554,1729,1923,2140],"cum":[0,3036,6414,10173,14355,19008,24186,29947,36357,43489,51425,60254,70079,81011,93174,106707,121766,138521,157163,177906,200987],"total20":200987},{"name":"Wisconsin Physicians Service (WPS)","color":"hsl(60 64% 46%)","method":"attained","base":273,"histTrend":10.3,"realTrend":7.3,"aging":2.5,"growth":12.8,"nPts":2,"prem":[273,308,347,392,442,499,562,634,716,807,910,1027,1158,1307,1474,1663,1875,2116,2386,2692,3036],"cum":[0,3276,6971,11140,15842,21145,27128,33876,41488,50075,59760,70686,83010,96911,112591,130279,150231,172736,198123,226758,259059],"total20":259059},{"name":"Guarantee Trust Life","color":"hsl(198 64% 46%)","method":"attained","base":292,"histTrend":6.5,"realTrend":3.5,"aging":2.5,"growth":9,"nPts":0,"prem":[292,318,347,378,412,449,490,534,582,634,691,753,821,895,976,1064,1159,1264,1377,1501,1636],"cum":[0,3504,7323,11486,16024,20970,26362,32238,38644,45626,53236,61531,70573,80429,91171,102881,115644,129556,144720,161249,179265],"total20":179265},{"name":"GPM Health and Life","color":"hsl(335 64% 46%)","method":"attained","base":373,"histTrend":16.2,"realTrend":13.2,"aging":2.5,"growth":18.7,"nPts":2,"prem":[373,443,526,624,740,879,1043,1238,1470,1745,2071,2458,2918,3464,4112,4881,5793,6877,8162,9689,11501],"cum":[0,4476,9789,16096,23581,32467,43015,55534,70395,88035,108974,133828,163329,198348,239915,289255,347822,417341,499859,597809,714075],"total20":714075}]};
+/* PROJECTION_DATA_END */
+(function(){
+  const P = PROJECTION, panel = document.getElementById("projection");
+  if(!P || !panel) return;
+  const C = P.carriers, N = C.length, ages = P.ages, na = ages.length;
+  const xmin = ages[0], xmax = ages[na-1];
+  let vis = C.map(()=>true), hov = -1;
+
+  const money  = v => "$"+Math.round(v).toLocaleString();
+  const moneyK = v => v>=1000 ? "$"+Math.round(v/1000)+"k" : "$"+Math.round(v);
+  function niceMax(m){ if(m<=0)return 1; const p=Math.pow(10,Math.floor(Math.log10(m))); const r=m/p;
+    const s = r<=1?1:r<=2?2:r<=2.5?2.5:r<=5?5:10; return s*p; }
+
+  const charts = [
+    {id:"chartPremium", key:"prem", fmtY:money,  title:"Monthly premium"},
+    {id:"chartCum",     key:"cum",  fmtY:moneyK, title:"Total paid"},
+  ];
+  const W=560,H=360,L=62,R=16,T=12,B=36;
+
+  function geom(key){
+    let ymax=0;
+    C.forEach((c,i)=>{ if(vis[i]) c[key].forEach(v=>{ if(v>ymax)ymax=v; }); });
+    if(ymax===0) C.forEach(c=>c[key].forEach(v=>{ if(v>ymax)ymax=v; }));
+    ymax=niceMax(ymax);
+    return {ymax, px:a=>L+(a-xmin)/(xmax-xmin)*(W-L-R), py:v=>(H-B)-v/ymax*(H-T-B)};
+  }
+
+  function draw(ch){
+    const host=document.getElementById(ch.id), {ymax,px,py}=geom(ch.key);
+    ch._px=px; ch._py=py;
+    let s="";
+    for(let i=0;i<=5;i++){ const v=ymax*i/5, y=py(v);
+      s+=`<line class="ax-grid" x1="${L}" y1="${y.toFixed(1)}" x2="${W-R}" y2="${y.toFixed(1)}"/>`;
+      s+=`<text class="ax-text" x="${L-8}" y="${(y+3.5).toFixed(1)}" text-anchor="end">${ch.fmtY(v)}</text>`;
+    }
+    for(let a=xmin;a<=xmax;a+=5){ const x=px(a);
+      s+=`<text class="ax-text" x="${x.toFixed(1)}" y="${H-B+16}" text-anchor="middle">${a}</text>`;
+    }
+    s+=`<line class="ax-line" x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}"/>`;
+    s+=`<text class="ax-title" x="${((L+W-R)/2).toFixed(0)}" y="${H-2}" text-anchor="middle">Age</text>`;
+    C.forEach((c,i)=>{ if(!vis[i])return;
+      const d=c[ch.key].map((v,t)=>`${t?'L':'M'}${px(ages[t]).toFixed(1)} ${py(v).toFixed(1)}`).join(" ");
+      s+=`<path class="ser" data-i="${i}" stroke="${c.color}" d="${d}"/>`;
+    });
+    host.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${ch.title} by age">${s}<g class="ends"></g></svg>`;
+  }
+
+  function applyHover(){
+    charts.forEach(ch=>{
+      const svg=document.getElementById(ch.id).firstChild, ends=svg.querySelector(".ends");
+      ends.innerHTML="";
+      svg.querySelectorAll(".ser").forEach(p=>{ const i=+p.dataset.i;
+        p.classList.toggle("hi", hov===i); p.classList.toggle("dim", hov>=0&&hov!==i); });
+      if(hov>=0 && vis[hov]){
+        const c=C[hov], arr=c[ch.key], lv=arr[arr.length-1];
+        ends.innerHTML=`<text class="ser-end" x="${(ch._px(xmax)-2).toFixed(1)}" y="${(ch._py(lv)-6).toFixed(1)}" text-anchor="end" fill="${c.color}">${ch.fmtY(lv)}</text>`;
+      }
+    });
+  }
+
+  function renderAll(){ charts.forEach(draw); applyHover(); }
+
+  const leg=document.getElementById("projLegend");
+  leg.innerHTML=C.map((c,i)=>{
+    const thin=c.nPts<2?`<span class="thin" title="Trend rests on ${c.nPts?'a single':'no'} rate filing — low-confidence projection">†</span>`:"";
+    return `<span class="lg-chip" data-i="${i}"><span class="sw" style="background:${c.color}"></span>`+
+      `<span class="nm">${c.name}</span>${thin} <span class="tot">${moneyK(c.total20)}</span></span>`;
+  }).join("");
+  leg.querySelectorAll(".lg-chip").forEach(chip=>{ const i=+chip.dataset.i;
+    chip.addEventListener("click",()=>{ vis[i]=!vis[i]; chip.classList.toggle("off",!vis[i]); renderAll(); });
+    chip.addEventListener("mouseenter",()=>{ hov=i; applyHover(); });
+    chip.addEventListener("mouseleave",()=>{ hov=-1; applyHover(); });
+  });
+  function setVis(fn){ vis=C.map((c,i)=>fn(c,i));
+    leg.querySelectorAll(".lg-chip").forEach(ch=>ch.classList.toggle("off",!vis[+ch.dataset.i])); renderAll(); }
+  document.querySelectorAll(".pc-btn").forEach(b=>b.addEventListener("click",()=>{
+    const k=b.dataset.sel;
+    if(k==="all")       setVis(()=>true);
+    else if(k==="none") setVis(()=>false);
+    else if(k==="top")  setVis(c=>P.topPicks.includes(c.name));
+    else if(k==="cheap")setVis(c=>P.cheapest5.includes(c.name));
+  }));
+
+  renderAll();
+})();
 
 /* tabs */
 document.querySelectorAll(".tab").forEach(t=>{

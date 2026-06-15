@@ -41,6 +41,12 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+# Generate the 20-year projection section + inject chart data into docs/index.html.
+# (Skipped on --check, which writes nothing.)
+if [[ $CHECK_ONLY -eq 0 ]]; then
+  node build-projection.js
+fi
+
 # Section files in build order.
 # To skip a section, prefix it with "# " in the array.
 # To add a new section, add a new line to the array.
@@ -64,6 +70,7 @@ SECTIONS=(
   "src/16-plan-g-loss-ratio.md"
   "src/17-plan-g-complaint-index.md"
   "src/18-plan-g-rate-increase.md"
+  "src/18b-20-year-projection.md"
   "src/19-am-best-market-share.md"
   "src/20-plan-g-top-pick-1-bcbs-michigan.md"
   "src/21-plan-g-top-pick-2-mutual-of-omaha.md"
