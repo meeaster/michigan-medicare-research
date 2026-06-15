@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Choosing a Medicare Plan G Carrier — Michigan 2026</title>
+<style>
+  :root{
+    --bg:#f4f6f9; --surface:#ffffff; --ink:#1f2a36; --ink2:#3d4b5a; --muted:#6b7a8d;
+    --line:#e3e8 ; --line:#e4e9ef; --soft:#f0f3f7;
+    --accent:#1f6feb; --accent-soft:#eaf2ff;
+    --green:#1a8a4a; --green-bg:#e8f6ee;
+    --amber:#a86a14; --amber-bg:#fbf1de;
+    --orange:#b4541b; --orange-bg:#fbece0;
+    --red:#c0392b; --red-bg:#fbe9e7;
+    --gray:#67727e; --gray-bg:#eef1f4;
+    --shadow:0 1px 2px rgba(20,40,70,.04),0 4px 16px rgba(20,40,70,.06);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:17px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .container{max-width:980px; margin:0 auto; padding:0 22px}
+
+  header{background:linear-gradient(180deg,#ffffff,#f4f6f9); border-bottom:1px solid var(--line)}
+  .head-inner{padding:38px 0 26px}
+  h1{margin:0 0 8px; font-size:31px; line-height:1.2; letter-spacing:-.02em; font-weight:700}
+  .lede{font-size:18px; color:var(--ink2); margin:0; max-width:680px}
+  .profile{margin-top:16px; display:inline-flex; flex-wrap:wrap; gap:8px}
+  .profile span{
+    background:var(--accent-soft); color:#155bbd; font-size:13.5px; font-weight:600;
+    padding:5px 11px; border-radius:30px;
+  }
+
+  /* Tabs */
+  .tabs{position:sticky; top:0; z-index:10; background:rgba(244,246,249,.92);
+    backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
+  .tabs-inner{display:flex; gap:4px}
+  .tab{
+    appearance:none; border:none; background:none; cursor:pointer;
+    font:inherit; font-weight:600; font-size:16px; color:var(--muted);
+    padding:16px 18px 14px; border-bottom:3px solid transparent; white-space:nowrap;
+  }
+  .tab .n{font-size:12px; color:#b3bdc8; margin-right:7px; font-variant-numeric:tabular-nums}
+  .tab:hover{color:var(--ink2)}
+  .tab.active{color:var(--accent); border-bottom-color:var(--accent)}
+  .tab.active .n{color:var(--accent)}
+
+  main{padding:34px 0 70px}
+  .panel{display:none; animation:fade .25s ease}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none}}
+
+  .intro{font-size:18px; color:var(--ink2); max-width:720px; margin:0 0 30px}
+  h2{font-size:23px; letter-spacing:-.015em; margin:0 0 6px}
+  .section-note{color:var(--muted); margin:0 0 26px; max-width:720px}
+
+  /* Metric cards */
+  .card{
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    padding:22px 24px; margin-bottom:16px; box-shadow:var(--shadow);
+  }
+  .card-head{display:flex; align-items:center; gap:14px; margin-bottom:10px}
+  .badge{
+    flex:none; width:38px; height:38px; border-radius:10px; background:var(--accent-soft);
+    color:var(--accent); font-weight:700; font-size:17px; display:grid; place-items:center;
+  }
+  .card h3{margin:0; font-size:19px; letter-spacing:-.01em}
+  .card .src{color:var(--muted); font-size:13.5px; margin-top:1px}
+  .card p{margin:0 0 12px; color:var(--ink2)}
+  .signal{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px}
+  .signal div{font-size:14.5px; padding:8px 13px; border-radius:9px; flex:1; min-width:230px}
+  .signal .g{background:var(--green-bg); color:#136a39}
+  .signal .b{background:var(--red-bg); color:#9e2b1d}
+  .signal b{font-weight:700}
+
+  /* Table */
+  .table-wrap{background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); overflow:hidden}
+  .scroll{overflow-x:auto}
+  table{width:100%; border-collapse:collapse; font-size:15.5px; min-width:720px}
+  thead th{
+    text-align:left; padding:14px 16px; background:var(--soft); color:var(--ink2);
+    font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.03em;
+    border-bottom:1px solid var(--line); white-space:nowrap;
+  }
+  thead th.num{text-align:right}
+  tbody tr.row{border-bottom:1px solid var(--line); cursor:pointer; transition:background .12s}
+  tbody tr.row:last-child{border-bottom:none}
+  tbody tr.row:hover{background:#f8fafc}
+  td{padding:14px 16px; vertical-align:middle}
+  td.num{text-align:right; font-variant-numeric:tabular-nums}
+  .cname{font-weight:650; color:var(--ink)}
+  .chev{color:#aab4c0; font-size:12px; margin-left:7px}
+  .tags{margin-top:4px; display:flex; gap:6px; flex-wrap:wrap}
+  .tag{font-size:11.5px; padding:2px 8px; border-radius:20px; font-weight:600; border:1px solid transparent}
+  .tag.mi{background:var(--green-bg); color:#157040}
+  .tag.iss{background:#f1ebfb; color:#6b3fb0}
+  .tag.mil{background:#eaf0fb; color:#2c5cab}
+  .pill{font-weight:700; font-size:13px; padding:4px 11px; border-radius:30px; white-space:nowrap; display:inline-block}
+  .pill.Strong{background:var(--green-bg); color:var(--green)}
+  .pill.Moderate{background:var(--amber-bg); color:var(--amber)}
+  .pill.Caution{background:var(--orange-bg); color:var(--orange)}
+  .pill.Avoid{background:var(--red-bg); color:var(--red)}
+  .pill.Unproven{background:var(--gray-bg); color:var(--gray)}
+  .m-good{color:var(--green); font-weight:600}
+  .m-warn{color:var(--orange); font-weight:600}
+  .m-bad{color:var(--red); font-weight:600}
+  .m-na{color:var(--muted)}
+
+  tr.detail td{padding:0; background:#fafcfe}
+  .detail-inner{padding:6px 20px 22px; display:none}
+  tr.detail.open .detail-inner{display:block}
+  .glance{font-size:14.5px; color:var(--muted); font-style:italic; margin:10px 0 16px;
+    padding-left:13px; border-left:3px solid var(--line)}
+  .pc{display:flex; gap:30px; flex-wrap:wrap}
+  .pc > div{flex:1; min-width:260px}
+  .pc h4{margin:0 0 8px; font-size:14px; text-transform:uppercase; letter-spacing:.04em}
+  .pc .pros h4{color:var(--green)} .pc .cons h4{color:var(--red)}
+  .pc ul{margin:0; padding-left:20px} .pc li{margin-bottom:6px; color:var(--ink2); font-size:15px}
+
+  .legend{display:flex; flex-wrap:wrap; gap:18px; margin-top:16px; font-size:13.5px; color:var(--muted)}
+  .legend b{color:var(--ink2)}
+
+  /* Top picks */
+  .rank-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:0; margin-bottom:24px; overflow:hidden;
+  }
+  .rc-top{padding:22px 26px 18px; border-bottom:1px solid var(--line); background:linear-gradient(180deg,#fcfdff,#fff)}
+  .rc-rank{display:inline-flex; align-items:center; gap:10px; margin-bottom:6px}
+  .rc-rank .num{
+    width:30px; height:30px; border-radius:50%; background:var(--accent); color:#fff;
+    font-weight:700; font-size:15px; display:grid; place-items:center;
+  }
+  .rc-rank .best{font-size:13px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:.04em}
+  .rc-top h3{margin:2px 0 4px; font-size:22px; letter-spacing:-.015em}
+  .rc-quick{display:flex; flex-wrap:wrap; gap:8px 22px; margin-top:12px; font-size:14.5px; color:var(--ink2)}
+  .rc-quick div{display:flex; gap:6px} .rc-quick .k{color:var(--muted)} .rc-quick .v{font-weight:650}
+  .rc-body{padding:20px 26px 24px}
+  .rc-body p{margin:0 0 14px; color:var(--ink2)}
+  .rc-body p:last-child{margin-bottom:0}
+  .verdict-pill{margin-left:8px}
+
+  .callout{background:#fff8e8; border:1px solid #f0e0b6; border-radius:12px; padding:16px 20px; margin:8px 0 30px; color:#6b551f; font-size:15px}
+  .callout b{color:#5a460f}
+  .disclaimer{margin-top:40px; padding-top:22px; border-top:1px solid var(--line); color:var(--muted); font-size:13.5px}
+  a{color:var(--accent)}
+  @media(max-width:640px){
+    h1{font-size:25px} .lede{font-size:16.5px}
+    .head-inner{padding:28px 0 20px}
+    .tab{padding:14px 12px 12px; font-size:15px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container head-inner">
+    <h1>Choosing a Medicare Plan&nbsp;G Carrier in Michigan</h1>
+    <p class="lede">Every insurer's Plan&nbsp;G covers exactly the same things by law — so the real decision is <em>which company</em> to trust to keep it affordable and pay your claims for the next 20&nbsp;years. This guide walks through what we compared, the numbers for every carrier, and our three top picks.</p>
+    <div class="profile">
+      <span>Plan G</span><span>Age 65 · Female · Non-smoker</span><span>Michigan</span><span>2026 rates</span>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="container tabs-inner">
+    <button class="tab active" data-tab="data"><span class="n">01</span>What We Compared</button>
+    <button class="tab" data-tab="carriers"><span class="n">02</span>Every Carrier</button>
+    <button class="tab" data-tab="picks"><span class="n">03</span>Our Top 3 Picks</button>
+  </div>
+</nav>
+
+<main>
+<div class="container">
+
+  <!-- TAB 1 -->
+  <section class="panel active" id="data">
+    <p class="intro">A cheap premium is the easiest number to see and the most misleading one to choose on. To compare carriers fairly, we gathered five pieces of public data on each company. Here's what each one is, where it comes from, and why it matters when you're picking a plan you may keep for decades.</p>
+
+    <div class="card">
+      <div class="card-head"><div class="badge">$</div>
+        <div><h3>Monthly Premium</h3><div class="src">Source: Medicare.gov Plan Finder, 2026</div></div></div>
+      <p>What you pay each month, on top of your standard Part&nbsp;B premium. For this profile, Plan&nbsp;G premiums range from <b>$113 to $537</b> a month — for identical coverage. The lowest price is tempting, but it's only the <em>starting</em> price.</p>
+      <div class="signal">
+        <div class="g"><b>Good sign:</b> a low-to-mid premium from a carrier that <em>also</em> scores well on the measures below.</div>
+        <div class="b"><b>Warning sign:</b> the very cheapest price from a carrier with no track record — it rarely stays cheapest.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div class="badge">%</div>
+        <div><h3>Loss Ratio</h3><div class="src">Source: NAIC 2024 Medicare Supplement Loss Ratio Report</div></div></div>
+      <p>The share of every premium dollar the insurer pays back out as medical claims. An 86% loss ratio means 86¢ of each dollar goes to claims and 14¢ to overhead and profit. A <b>healthy range is roughly 75–90%</b>. Too low can mean you're being overcharged; <em>above 95–100% is the real red flag</em> — the carrier is barely breaking even and will almost certainly raise rates to catch up.</p>
+      <div class="signal">
+        <div class="g"><b>Good sign:</b> 75–90% — fair pricing that's keeping pace with claims.</div>
+        <div class="b"><b>Warning sign:</b> over 95% (rate hikes coming) or under 72% (possibly overpriced).</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div class="badge">★</div>
+        <div><h3>Complaint Index</h3><div class="src">Source: National Association of Insurance Commissioners (NAIC)</div></div></div>
+      <p>How often a company's members complain, adjusted for its size. <b>1.0 is exactly average</b>; below 1.0 means fewer complaints than expected, above 1.0 means more. This is the number that tells you how <em>painful</em> it will be to actually get a claim paid — whether the phone gets answered and the bill gets handled without five callbacks. The best carriers here sit near 0.5; the worst are above 3.0.</p>
+      <div class="signal">
+        <div class="g"><b>Good sign:</b> well below 1.0 — claims tend to "just work."</div>
+        <div class="b"><b>Warning sign:</b> 1.5 or higher — expect friction and follow-up calls.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div class="badge">↑</div>
+        <div><h3>Rate-Increase History</h3><div class="src">Source: Michigan SERFF filings &amp; CSG Actuarial, 2024–2026</div></div></div>
+      <p>How fast a carrier has been raising premiums. This matters <em>more than today's price.</em> Plan&nbsp;G premiums rise every year, and the difference between a carrier averaging 6% and one averaging 15% is enormous over time: a $190 premium growing 6% a year is about $340 in ten years — at 15% a year it's about $770. A steady, single-digit history is worth paying a little more up front.</p>
+      <div class="signal">
+        <div class="g"><b>Good sign:</b> a steady mid-single-digit history (e.g., 6–8% a year).</div>
+        <div class="b"><b>Warning sign:</b> double-digit jumps, or a "lumpy" pattern with sudden 20%+ spikes.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div class="badge">◆</div>
+        <div><h3>Financial Strength &amp; Size</h3><div class="src">Source: AM Best ratings &amp; NAIC market-share data</div></div></div>
+      <p>AM Best grades an insurer's ability to pay claims on a scale from A++ (Superior) down. <b>A- or better is considered "Secure."</b> We also look at how many Michigan members a carrier has: a large, active book of business is far less likely to be closed off and left to spiral into steep "dead-end" rate increases. For a policy you'll hold for 20 years, you want a financially strong carrier that's clearly committed to the Michigan market.</p>
+      <div class="signal">
+        <div class="g"><b>Good sign:</b> AM Best A- or higher, with a large, active Michigan membership.</div>
+        <div class="b"><b>Warning sign:</b> a B++ rating, or a tiny book of business that could be closed.</div>
+      </div>
+    </div>
+
+    <div class="callout"><b>The bottom line for tab 2 and 3:</b> No single number decides it. The carriers we recommend are the ones that score well across <em>all five</em> — a fair price, a healthy loss ratio, few complaints, a calm rate history, and the financial strength to still be here in 20 years.</div>
+  </section>
+
+  <!-- TAB 2 -->
+  <section class="panel" id="carriers">
+    <h2>Every Plan&nbsp;G Carrier in Michigan</h2>
+    <p class="section-note">All 27 companies offering Plan&nbsp;G for this profile, listed cheapest first. The colored "verdict" reflects how each one scores across all five measures from tab&nbsp;1. <b>Tap any row</b> to read its specific pros and cons.</p>
+
+    <div class="table-wrap"><div class="scroll">
+      <table>
+        <thead><tr>
+          <th>Carrier</th>
+          <th class="num">Monthly</th>
+          <th class="num">AM&nbsp;Best</th>
+          <th class="num">Loss&nbsp;Ratio</th>
+          <th class="num">Complaints</th>
+          <th class="num">Recent&nbsp;Increase</th>
+          <th>Verdict</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div></div>
+
+    <div class="legend">
+      <span><b>Monthly:</b> 2026 estimate for the profile above (range = multiple tiers)</span>
+      <span><b>Loss Ratio:</b> 75–90% is healthy</span>
+      <span><b>Complaints:</b> 1.0 = average, lower is better, ~ = estimated</span>
+      <span><b>Increase:</b> most recent known annual rate hike</span>
+    </div>
+  </section>
+
+  <!-- TAB 3 -->
+  <section class="panel" id="picks">
+    <h2>Our Top 3 Picks</h2>
+    <p class="section-note">These three stand out for scoring well across <em>every</em> measure — not just price. There's no single "best": the right one depends on whether you most value rock-bottom stability, the smoothest claims experience, or sheer scale. Each pick below explains who it's for and why.</p>
+
+    <div id="picksList"></div>
+
+    <div class="callout"><b>Two strong runners-up:</b> <b>State Farm ($149)</b> is the lowest-priced carrier that still scores excellently — A+ rated with one of the best complaint records — but you generally have to buy through a local State Farm agent. <b>USAA ($179)</b> has the highest financial rating of all (A++) but is only available to military families. Both are worth a quote if either fits.</div>
+  </section>
+
+  <div class="container disclaimer">
+    Compiled from Medicare.gov, the NAIC 2024 Medicare Supplement Loss Ratio Report, NAIC complaint data, Michigan SERFF / CSG Actuarial rate filings, and AM&nbsp;Best ratings. Premiums are estimates for one specific profile and will differ by age, ZIP, tobacco use, and health. This is an informational summary, not financial or insurance advice — get an official quote and confirm details with each carrier (or a Michigan MMAP counselor, 1-800-803-7174) before enrolling.
+  </div>
+</div>
+</main>
+
+<script>
+const CARRIERS = [
+ {name:"Michigan Farm Bureau Health Plans", prem:"$113", amBest:"A", lr:null, ci:null, est:false, rate:null, tags:["mi"], verdict:"Unproven",
+  glance:"$113 · AM Best A (parent) · loss ratio not public · complaint index not reported · no public Michigan rate history.",
+  pros:["Cheapest Plan G in Michigan — about $78/mo below Blue Cross","A Michigan-based carrier with a familiar local name","The underlying Farm Bureau Life company is A (Excellent) rated","Starts very low at age 65"],
+  cons:["No public loss ratio, complaint, or rate-increase data — the block has only a handful of reported members","A tiny, unproven book of business — real risk it gets closed or spikes later","The cheap price today tells you nothing about the next 5–10 years","Lowest-rate availability varies by ZIP and age"]},
+
+ {name:"MedMutual Protect (Medical Mutual of Ohio)", prem:"$148", amBest:"A", lr:75.3, ci:1.3, est:true, rate:null, tags:[], verdict:"Moderate",
+  glance:"$148 · AM Best A · loss ratio 75.3% · complaint index ~1.3 (estimated) · no Michigan rate history found.",
+  pros:["Second-cheapest Plan G in the state","A (Excellent) financial strength","75.3% loss ratio is healthy — not overcharging","Backed by a large, established Ohio mutual insurer"],
+  cons:["Small Michigan presence","Complaint estimate is above average","No Michigan rate-increase history to judge the trajectory"]},
+
+ {name:"State Farm", prem:"$149", amBest:"A+", lr:82.7, ci:0.51, est:false, rate:7.4, tags:[], verdict:"Strong",
+  glance:"$149 · AM Best A+ · loss ratio 82.7% · complaint index ~0.51 · ~7.4% increase in 2025.",
+  pros:["A very low price paired with genuinely strong quality","0.51 complaint index — about half the average (one of the best)","A+ (Superior) financial strength","82.7% loss ratio and modest ~7.4% recent increase","A local agent you can sit down with"],
+  cons:["Usually must be purchased through a State Farm agent, and not all of them sell it","Small Medicare-supplement footprint in Michigan","Recently nudged down from A++ to A+ (due to its auto/home business, not this line)"]},
+
+ {name:"Medico Life and Health", prem:"$151–189", amBest:"A", lr:94.9, ci:1.29, est:false, rate:11.0, tags:[], verdict:"Moderate",
+  glance:"$151–189 · AM Best A · loss ratio 94.9% · complaint index ~1.29 · ~11% in 2025.",
+  pros:["Low entry price ($151)","A (Excellent) financial strength"],
+  cons:["94.9% loss ratio is thin — rate increases are likely","29% more complaints than average; flagged for unclear coverage","Three confusingly similar tiers at different prices","High recent increase history"]},
+
+ {name:"Humana", prem:"$157–160", amBest:"A", lr:100, ci:3.28, est:false, rate:10.0, tags:[], verdict:"Caution",
+  glance:"$157–160 · AM Best A · loss ratio ~98–102% · complaint index ~3.28 · 6–10% in 2025.",
+  pros:["Low price and a very well-known national brand","A (Excellent) financial strength"],
+  cons:["Complaint index ~3.28 — members complain 228% more than average","One Humana block is paying out more than it collects — big increases likely","Humana's real focus is Medicare Advantage, not supplements","The low entry price is unlikely to last"]},
+
+ {name:"McLaren Health Plan", prem:"$159–214", amBest:"NR", lr:83.4, ci:0.88, est:true, rate:14.5, tags:["mi"], verdict:"Moderate",
+  glance:"$159–214 · not separately AM Best rated · loss ratio 83.4% · complaint index ~0.9 · 14.5% in 2026.",
+  pros:["Low entry price for a Michigan-based carrier","83.4% loss ratio is healthy","A guaranteed-issue tier is available","Part of the McLaren health system, with virtual care"],
+  cons:["Three straight years of double-digit increases (8% → 11% → 14.5%)","Not separately rated by AM Best","Small book of business means bumpier year-to-year pricing","Four tiers spanning $159–214"]},
+
+ {name:"Cigna / HealthSpring", prem:"$173–259", amBest:"A", lr:99.3, ci:1.42, est:false, rate:9.9, tags:[], verdict:"Caution",
+  glance:"$173–259 · AM Best A · loss ratio 99.3% · complaint index ~1.42 · 7.5–9.9% increases.",
+  pros:["Low-to-mid entry price","A (Excellent) financial strength","Large national insurer behind it"],
+  cons:["99.3% loss ratio — basically breaking even; the clearest sign of coming rate hikes","42% more complaints than average","Cigna's Medicare business changed hands in 2025 — transition risk","Upper tier jumps to $259"]},
+
+ {name:"Health Alliance Plan (HAP)", prem:"$178–223", amBest:"NR", lr:96.8, ci:1.2, est:true, rate:12.9, tags:["mi"], verdict:"Moderate",
+  glance:"$178–223 · not AM Best rated · loss ratio 96.8% · complaint index ~1.2 · 12.9% in 2025.",
+  pros:["Michigan-based, owned by Henry Ford Health","Moderate entry price"],
+  cons:["96.8% loss ratio is thin — under rate pressure","Sharp 12.9% increase in 2025","Not AM Best rated","Small book; the standard tier is $223"]},
+
+ {name:"USAA", prem:"$179", amBest:"A++", lr:83.9, ci:null, est:false, rate:10.0, tags:["mil"], verdict:"Strong",
+  glance:"$179 · AM Best A++ (highest) · loss ratio 83.9% · ~10% increase in 2025.",
+  pros:["A++ (Superior) — the highest financial rating of any carrier here","83.9% loss ratio is healthy","A low price for that level of strength","Renowned member service"],
+  cons:["Only available to USAA-eligible military families","Moderate (~10%) recent increase","Small Michigan footprint"]},
+
+ {name:"AARP / UnitedHealthcare", prem:"$182", amBest:"A", lr:83.1, ci:0.8, est:true, rate:17.7, tags:[], verdict:"Strong",
+  glance:"$182 (Standard) · AM Best A · loss ratio 83.1% · complaint index under 1.0 · 17.7% in Michigan for 2026.",
+  pros:["By far the largest carrier in Michigan and the U.S. — essentially zero risk of being closed","83.1% loss ratio and a below-average complaint index, despite its huge size","The only carrier that publishes an audited multi-year Michigan rate history (~3.3%/yr in 2017–2022)","The best member services — 24/7 support, app, online claims"],
+  cons:["Recent increases of 12–17% — well above its own history (17.7% in Michigan for 2026)","A 2026 class-action lawsuit alleges improper claim denials","Requires AARP membership (~$20/yr); ignore the pricey $537 'Level 2' tier","Slightly downgraded by AM Best in 2025 (due to its Medicare Advantage business)"]},
+
+ {name:"American Benefit Life", prem:"$182", amBest:"A-", lr:107.9, ci:1.8, est:true, rate:9.5, tags:[], verdict:"Avoid",
+  glance:"$182 · AM Best A- · loss ratio 107.9% (worst here) · complaint index ~1.8 · ~9.5% increases.",
+  pros:["Low price at sign-up","A- (Excellent) financial strength"],
+  cons:["107.9% loss ratio — the worst of any carrier; it's paying out more than it collects","Steep future rate increases are nearly certain","Poor complaint record (~1.8)","Tiny book with no scale advantages"]},
+
+ {name:"Priority Health", prem:"$183–279", amBest:"A", lr:85.1, ci:1.0, est:true, rate:11.6, tags:["mi"], verdict:"Strong",
+  glance:"$183–279 · AM Best A · loss ratio 85.1% · complaint index ~1.0 · 11.6% in 2025.",
+  pros:["Michigan-based, part of Corewell Health (~1.3M members statewide)","A (Excellent) financial strength","85.1% loss ratio is healthy","Average complaints; 10+ years in the supplement business"],
+  cons:["11.6% increase in 2025 — above Michigan's historical average","Four tiers pushing the top to $279","Premiums rise with age (attained-age pricing)"]},
+
+ {name:"Nassau Life", prem:"$183", amBest:"B++", lr:84.1, ci:1.0, est:true, rate:-1.7, tags:[], verdict:"Caution",
+  glance:"$183 · AM Best B++ (below A-) · loss ratio 84.1% · complaint index ~1.0 · a small recent decrease.",
+  pros:["84.1% loss ratio is healthy","Very low recent increases (even a small cut in one filing)","Mid-range price"],
+  cons:["B++ rating is below the 'Secure' threshold — a sign of relative financial stress","Small book; numbers can swing year to year","Thinner public track record"]},
+
+ {name:"AFLAC", prem:"$190", amBest:"A+", lr:99.1, ci:3.62, est:false, rate:22.0, tags:[], verdict:"Caution",
+  glance:"$190 · AM Best A+ · loss ratio 99.1% · complaint index ~3.62 (worst here) · 22% in Michigan for 2026.",
+  pros:["A+ (Superior) financial strength","Strong, familiar national brand"],
+  cons:["3.62 complaint index — 262% more complaints than average, the worst here; 1.5/5 stars on BBB reviews","22% Michigan increase for 2026 — the highest in the state","99.1% loss ratio — breaking even, with more hikes coming","New to supplements (2022) and the type of insurer that has closed these blocks before"]},
+
+ {name:"Blue Cross Blue Shield of Michigan", prem:"$191", amBest:"A", lr:86.3, ci:0.70, est:false, rate:6.5, tags:["mi"], verdict:"Strong",
+  glance:"$191 · AM Best A (Negative outlook) · loss ratio 86.3% · complaint index ~0.70 · 6.5% in both 2024 and 2025.",
+  pros:["The lowest recent increases among the big carriers — 6.5% two years running vs a 12.7% industry average","Healthy 86.3% loss ratio and a strong 0.70 complaint index (30% fewer than expected)","The largest Michigan-based block (~27% of the market), regulated by Michigan's own department","A (Excellent) financial strength — the sensible default for most Michiganders"],
+  cons:["AM Best has it on a 'Negative outlook' (a possible future downgrade, though this line is stable)","A mid-range price — not the cheapest","Raised some legacy plans sharply back in 2016, so big increases aren't impossible"]},
+
+ {name:"Continental Life (Aetna)", prem:"$197", amBest:"A", lr:86.5, ci:1.36, est:false, rate:8.0, tags:[], verdict:"Moderate",
+  glance:"$197 · AM Best A · loss ratio 86.5% · complaint index ~1.36 · lumpy increases (8% → 22% → 8%).",
+  pros:["A (Excellent) financial strength, backed by Aetna/CVS","Healthy 86.5% loss ratio","Large national infrastructure"],
+  cons:["A lumpy rate history — a 22% spike in 2025 between two 8% years","36% more complaints than average (Aetna group)","No clear advantage over Blue Cross or State Farm at this price"]},
+
+ {name:"Physicians Life", prem:"$203", amBest:"A+", lr:82.4, ci:1.0, est:true, rate:null, tags:[], verdict:"Moderate",
+  glance:"$203 · AM Best A+ · loss ratio 82.4% · complaint index ~1.0 · no Michigan rate history found.",
+  pros:["A+ (Superior) financial strength","82.4% loss ratio is healthy","Average complaints; an established supplement insurer"],
+  cons:["Higher price without a standout advantage","No Michigan rate-increase history to judge","Small Michigan footprint"]},
+
+ {name:"First Health (Aetna)", prem:"$205", amBest:"A", lr:88.2, ci:1.36, est:true, rate:8.0, tags:[], verdict:"Moderate",
+  glance:"$205 · AM Best A · loss ratio 88.2% · complaint index ~1.36 · lumpy Aetna increases.",
+  pros:["A (Excellent) financial strength, Aetna/CVS backing","Healthy 88.2% loss ratio"],
+  cons:["Higher price for an Aetna sibling product","Above-average complaints (Aetna group ~1.36)","Small book; shares Aetna's lumpy rate pattern"]},
+
+ {name:"WoodmenLife", prem:"$214", amBest:"A+", lr:90.1, ci:1.5, est:true, rate:14.0, tags:[], verdict:"Caution",
+  glance:"$214 · AM Best A+ · loss ratio 90.1% · complaint index ~1.5 · 14% in 2025.",
+  pros:["A+ (Superior) financial strength","An established fraternal benefit society"],
+  cons:["14% increase in 2025 — above average","Thin 90.1% loss ratio","Higher price and a small, newer supplement block","Estimated complaints above average"]},
+
+ {name:"Bankers Life (Washington National)", prem:"$219–270", amBest:"A", lr:82.1, ci:1.3, est:true, rate:5.4, tags:[], verdict:"Moderate",
+  glance:"$219–270 · AM Best A · loss ratio 82.1% · complaint index ~1.2–1.5 · ~5.4% in 2025.",
+  pros:["A (Excellent) financial strength","Healthy 82.1% loss ratio","Modest ~5.4% recent increase"],
+  cons:["Higher price ($219, up to $270 for the substandard tier)","Above-average complaints","Captive-agent sales model; the 'substandard' tier can confuse healthy applicants"]},
+
+ {name:"Mutual of Omaha", prem:"$220", amBest:"A+", lr:97.5, ci:0.48, est:false, rate:8.8, tags:[], verdict:"Strong",
+  glance:"$220 · AM Best A+ · loss ratio 97.5% · complaint index ~0.48 (best here) · 8.8% in 2025.",
+  pros:["0.48 complaint index — 52% fewer than expected, the best of any carrier here","A+ (Superior) — a notch above Blue Cross and AARP/UHC","The #2 supplement carrier in the country — no risk of being closed","Moderate 8.8% increases; its 97.5% loss ratio reflects fair, close-to-cost pricing"],
+  cons:["About $29/mo more than Blue Cross","That high loss ratio leaves little cushion if claims rise faster","Five related company names can be confusing; it's Nebraska-based, not Michigan"]},
+
+ {name:"Bankers Fidelity Assurance", prem:"$226–271", amBest:"A-", lr:71.9, ci:1.3, est:true, rate:2.0, tags:[], verdict:"Moderate",
+  glance:"$226–271 · AM Best A- · loss ratio 71.9% (lowest here) · complaint index ~1.3 · 0–2% increases.",
+  pros:["The lowest recent increases of anyone (0% then 2%)","A- (Excellent) financial strength","Also offers the cheapest high-deductible Plan G ($45)"],
+  cons:["71.9% loss ratio is the lowest here — below the healthy band, hinting at overcharging","Above-average complaints","Higher standard price; tends to target higher-risk applicants","Small book — the low-increase streak may not hold"]},
+
+ {name:"Everence Association", prem:"$230", amBest:"NR", lr:81.7, ci:1.0, est:true, rate:11.9, tags:["iss"], verdict:"Moderate",
+  glance:"$230 · not AM Best rated (fraternal) · loss ratio 81.7% · complaint index ~1.0 · 11.9% in 2026. Issue-age priced.",
+  pros:["Issue-age pricing — your premium is locked to your age at purchase and won't climb just because you get older (the only one here that works this way)","Healthy 81.7% loss ratio","Faith-based (Anabaptist) mutual-aid roots for members who value that"],
+  cons:["Not AM Best rated (a fraternal society)","11.9% increase for 2026","Higher price and a niche, membership-based orientation"]},
+
+ {name:"United American (Globe Life)", prem:"$253", amBest:"A", lr:76.4, ci:1.15, est:true, rate:15.0, tags:[], verdict:"Moderate",
+  glance:"$253 · AM Best A · loss ratio 76.4% · complaint index ~1.15 · 6.6% then 15% (2026).",
+  pros:["A (Excellent) financial strength","Healthy 76.4% loss ratio"],
+  cons:["High price — 90% above the cheapest Plan G","Sharp jump to 15% for 2026","Above-average complaints — high price and high friction"]},
+
+ {name:"Wisconsin Physicians Service (WPS)", prem:"$273", amBest:"NR", lr:75.0, ci:1.0, est:true, rate:5.4, tags:[], verdict:"Moderate",
+  glance:"$273 · not AM Best rated · loss ratio 75.0% · complaint index ~1.0 · 5.4% in 2025.",
+  pros:["Modest ~5.4% recent increase","75.0% loss ratio — right at the healthy line","Average complaints"],
+  cons:["High price","Not AM Best rated (an independent rater gives it a B+)","Small Michigan footprint"]},
+
+ {name:"Guarantee Trust Life", prem:"$292", amBest:"A", lr:80.6, ci:1.0, est:true, rate:null, tags:[], verdict:"Moderate",
+  glance:"$292 · AM Best A · loss ratio 80.6% · complaint index ~1.0 · no Michigan rate history found.",
+  pros:["A (Excellent) financial strength","Healthy 80.6% loss ratio","Average complaints"],
+  cons:["High price — among the most expensive standard Plan G policies","No Michigan rate history to judge","Small book"]},
+
+ {name:"GPM Health and Life", prem:"$373", amBest:"B++", lr:89.0, ci:1.0, est:true, rate:13.8, tags:[], verdict:"Avoid",
+  glance:"$373 (highest here) · AM Best B++ (below A-) · loss ratio 89.0% · complaint index ~1.0 · 18.6% then 13.8%.",
+  pros:["89.0% loss ratio is healthy on its own","Average complaints"],
+  cons:["The most expensive standard Plan G in Michigan — over triple Farm Bureau for identical coverage","B++ rating, below the 'Secure' threshold","Continued double-digit increases on an already top-of-market price","No scale or offsetting advantage at this price"]},
+];
+
+const TOP3 = [
+ {name:"Blue Cross Blue Shield of Michigan", best:"Best all-around default for most Michiganders",
+  facts:[["Premium","$191/mo"],["Financial","AM Best A"],["Loss ratio","86.3% (healthy)"],["Complaints","0.70 (30% fewer)"],["Recent increases","6.5% in 2024 & 2025"]],
+  verdict:"Strong",
+  body:[
+   "If you want one safe, sensible choice and don't want to overthink it, this is it. Blue Cross is Michigan's own carrier — it holds the largest in-state book of business (roughly a quarter of the market) and is regulated directly by Michigan's insurance department. That scale matters: a big, active membership is the opposite of a shrinking plan that gets left to spiral into steep increases.",
+   "Its real standout is rate stability. While the typical Plan G nationwide jumped about 12.7% in 2025, Blue Cross raised rates just 6.5% — and did the same in 2024. Two steady years like that, on a policy you may hold for decades, can save thousands of dollars compared with a carrier taking double-digit increases. The supporting numbers are healthy too: an 86.3% loss ratio (good value per premium dollar) and a 0.70 complaint index, meaning about 30% fewer complaints than expected.",
+   "The one thing to keep an eye on: AM Best has Blue Cross on a 'Negative outlook,' which signals a possible future downgrade — but that reflects its other lines of business, not this stable supplement block, and an A rating is still firmly 'Secure.' At $191/mo it isn't the cheapest, but for a Michigan resident who plans to keep the plan long-term, it's the strongest balance of price, stability, and trust."
+  ]},
+
+ {name:"Mutual of Omaha", best:"Best if you want the smoothest claims experience",
+  facts:[["Premium","$220/mo"],["Financial","AM Best A+"],["Loss ratio","97.5%"],["Complaints","0.48 (best here)"],["Recent increases","8.8% in 2025"]],
+  verdict:"Strong",
+  body:[
+   "If your top priority is that claims simply get paid without hassle — fewer phone calls, fewer surprises — Mutual of Omaha is the pick. Its complaint index of 0.48 is the lowest of any carrier in this entire comparison, meaning members complain about half as often as average. In practice that's the difference between a claim that's handled on the first call and one that takes five.",
+   "It also carries an A+ (Superior) financial strength rating — a notch above both Blue Cross and AARP/UnitedHealthcare — and it's the second-largest Medicare supplement carrier in the country, so there's effectively no risk of the plan being closed down. Its recent increases have been moderate (about 8.8%), and while its loss ratio of 97.5% is high, that actually reflects fair, close-to-cost pricing rather than padding profits.",
+   "The trade-offs are modest. At $220/mo it's roughly $29 more than Blue Cross. That high loss ratio also leaves the carrier less cushion, so if medical costs rise quickly, increases could follow. And it's Nebraska-based rather than Michigan's own. But for someone willing to pay a little more for the best-rated, smoothest-running option, it's an easy recommendation."
+  ]},
+
+ {name:"AARP / UnitedHealthcare", best:"Best for scale, brand familiarity, and easy paperwork",
+  facts:[["Premium","$182/mo (Standard)"],["Financial","AM Best A"],["Loss ratio","83.1%"],["Complaints","under 1.0"],["Recent increases","17.7% (MI, 2026)"]],
+  verdict:"Strong",
+  body:[
+   "This is the giant of the group — more than one in three Michigan supplement policies, and 3.8 million members nationwide. That scale buys real advantages: the best member-service operation (24/7 phone support, a solid app, easy online claims), a brand every doctor's office recognizes, and zero chance of the plan being closed. It's also the only carrier that publishes an audited, multi-year Michigan rate history, which averaged a very low 3.3% a year from 2017–2022. The fundamentals are sound: an 83.1% loss ratio and a below-average complaint index even at its enormous size. At $182/mo for the Standard plan, it's competitively priced.",
+   "But there are real cautions, and they're why it's third rather than first. Its recent increases have run well ahead of that rosy history — 12% to 17% a year lately, including a 17.7% jump in Michigan for 2026 — so don't bank on the old 3.3% average continuing. There's also a class-action lawsuit filed in 2026 alleging the company improperly denied some claims; it's unresolved, but worth knowing about. You'll need an AARP membership (about $20/yr), and you should ignore the 'Level 2' version at $537 — it's the same plan priced for higher-risk buyers, not a better one.",
+   "Choose AARP/UnitedHealthcare if you value scale, name recognition, and effortless administration above squeezing out the lowest long-term cost — and go in with eyes open about the steeper recent increases."
+  ]},
+];
+
+/* render table */
+function lrCls(v){ if(v==null)return"m-na"; if(v>=75&&v<=90)return"m-good"; if(v>100)return"m-bad"; return"m-warn"; }
+function ciCls(v){ if(v==null)return"m-na"; if(v<0.8)return"m-good"; if(v<=1.1)return""; if(v<2)return"m-warn"; return"m-bad"; }
+function rateCls(v){ if(v==null)return"m-na"; if(v<=0||v<7)return"m-good"; if(v<11)return""; if(v<15)return"m-warn"; return"m-bad"; }
+const tagLabel={mi:"Michigan-based",iss:"Issue-age",mil:"Military only"};
+
+const tb=document.getElementById("tbody");
+CARRIERS.forEach(c=>{
+  const tr=document.createElement("tr"); tr.className="row";
+  const tags=c.tags.map(t=>`<span class="tag ${t}">${tagLabel[t]}</span>`).join("");
+  tr.innerHTML=
+    `<td><span class="cname">${c.name}</span><span class="chev">▾</span>${tags?`<div class="tags">${tags}</div>`:""}</td>`+
+    `<td class="num">${c.prem}</td>`+
+    `<td class="num">${c.amBest==="NR"?'<span class="m-na">Not&nbsp;rated</span>':c.amBest}</td>`+
+    `<td class="num ${lrCls(c.lr)}">${c.lr==null?'<span class="m-na">n/a</span>':c.lr.toFixed(1)+"%"}</td>`+
+    `<td class="num ${ciCls(c.ci)}">${c.ci==null?'<span class="m-na">n/a</span>':(c.est?"~":"")+c.ci.toFixed(2)}</td>`+
+    `<td class="num ${rateCls(c.rate)}">${c.rate==null?'<span class="m-na">n/a</span>':(c.rate<=0?c.rate.toFixed(1):c.rate.toFixed(1))+"%"}</td>`+
+    `<td><span class="pill ${c.verdict}">${c.verdict}</span></td>`;
+  const dt=document.createElement("tr"); dt.className="detail";
+  dt.innerHTML=`<td colspan="7"><div class="detail-inner">`+
+    `<div class="glance">${c.glance}</div>`+
+    `<div class="pc"><div class="pros"><h4>Pros</h4><ul>${c.pros.map(p=>`<li>${p}</li>`).join("")}</ul></div>`+
+    `<div class="cons"><h4>Cons</h4><ul>${c.cons.map(p=>`<li>${p}</li>`).join("")}</ul></div></div></div></td>`;
+  tr.addEventListener("click",()=>dt.classList.toggle("open"));
+  tb.appendChild(tr); tb.appendChild(dt);
+});
+
+/* render top 3 */
+const pl=document.getElementById("picksList");
+TOP3.forEach((p,i)=>{
+  const facts=p.facts.map(f=>`<div><span class="k">${f[0]}:</span> <span class="v">${f[1]}</span></div>`).join("");
+  const body=p.body.map(t=>`<p>${t}</p>`).join("");
+  const card=document.createElement("div"); card.className="rank-card";
+  card.innerHTML=
+    `<div class="rc-top">`+
+      `<div class="rc-rank"><span class="num">${i+1}</span><span class="best">${p.best}</span></div>`+
+      `<h3>${p.name}<span class="pill ${p.verdict} verdict-pill">${p.verdict}</span></h3>`+
+      `<div class="rc-quick">${facts}</div>`+
+    `</div><div class="rc-body">${body}</div>`;
+  pl.appendChild(card);
+});
+
+/* tabs */
+document.querySelectorAll(".tab").forEach(t=>{
+  t.addEventListener("click",()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+    t.classList.add("active");
+    document.getElementById(t.dataset.tab).classList.add("active");
+    window.scrollTo({top:0,behavior:"instant"in window?"instant":"auto"});
+  });
+});
+</script>
+</body>
+</html>
