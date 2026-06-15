@@ -122,6 +122,14 @@
   .pc .pros h4{color:var(--green)} .pc .cons h4{color:var(--red)}
   .pc ul{margin:0; padding-left:20px} .pc li{margin-bottom:6px; color:var(--ink2); font-size:15px}
 
+  .ratehist{margin:0 0 18px}
+  .ratehist h4{margin:0 0 9px; font-size:14px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink2)}
+  .rh-strip{display:flex; flex-wrap:wrap; gap:8px}
+  .rh-yr{display:inline-flex; align-items:baseline; gap:7px; padding:5px 11px; border:1px solid var(--line);
+    border-radius:7px; background:var(--surface); font-size:14px; white-space:nowrap}
+  .rh-yr b{font-size:12px; font-weight:700; color:var(--muted); letter-spacing:.02em}
+  .rh-na{color:var(--muted); font-size:14px; font-style:italic}
+
   .legend{display:flex; flex-wrap:wrap; gap:18px; margin-top:16px; font-size:13.5px; color:var(--muted)}
   .legend b{color:var(--ink2)}
 
@@ -418,6 +426,40 @@ const CARRIERS = [
   cons:["The most expensive standard Plan G in Michigan — over triple Farm Bureau for identical coverage","B++ rating, below the 'Secure' threshold","Continued double-digit increases on an already top-of-market price","No scale or offsetting advantage at this price"]},
 ];
 
+/* Per-year Plan G rate increases, by carrier. n = numeric value used for color;
+   v = display string. Out-of-state filings used as a proxy are noted in v.
+   Sources: Michigan SERFF / EnrollMedicare (MI), CSG Actuarial (filings by state),
+   and UHC's audited MI claim-substantiation report (2017–22). */
+const RATE_HISTORY = {
+ "Michigan Farm Bureau Health Plans":[],
+ "MedMutual Protect (Medical Mutual of Ohio)":[],
+ "State Farm":[{y:"2025",n:7.4,v:"7.4%"}],
+ "Medico Life and Health":[{y:"2024",n:8.8,v:"8.8%"},{y:"2025",n:11.0,v:"11.0%"}],
+ "Humana":[{y:"2024",n:4.4,v:"4.3–4.4%"},{y:"2025",n:10.0,v:"5.9–10.0%"}],
+ "McLaren Health Plan":[{y:"2024",n:8.0,v:"8.0%"},{y:"2025",n:11.4,v:"11.4%"},{y:"2026",n:14.5,v:"14.5%"}],
+ "Cigna / HealthSpring":[{y:"2024",n:9.9,v:"9.9% (ID)"},{y:"2025",n:7.5,v:"7.5% (FL)"}],
+ "Health Alliance Plan (HAP)":[{y:"2025",n:12.9,v:"12.9%"}],
+ "USAA":[{y:"2025",n:10.0,v:"10.0% (NC)"}],
+ "AARP / UnitedHealthcare":[{y:"2017–22",n:3.3,v:"3.3%/yr (MI audited avg)"},{y:"2024",n:12.2,v:"12.2%"},{y:"2025",n:10.3,v:"10.3%"},{y:"2026",n:17.7,v:"17.7% (MI)"}],
+ "American Benefit Life":[{y:"2024–25",n:9.5,v:"~9.5%/yr"}],
+ "Priority Health":[{y:"2025",n:11.6,v:"11.6%"}],
+ "Nassau Life":[{y:"2022",n:-1.7,v:"−1.7% (cut; varies by state)"}],
+ "AFLAC":[{y:"2024",n:7.0,v:"7.0% (CA/MT)"},{y:"2025",n:14.8,v:"14.8%"},{y:"2026",n:22.0,v:"22.0% (MI)"}],
+ "Blue Cross Blue Shield of Michigan":[{y:"2024",n:6.5,v:"6.5%"},{y:"2025",n:6.5,v:"6.5%"}],
+ "Continental Life (Aetna)":[{y:"2024",n:8.0,v:"8.0%"},{y:"2025",n:22.0,v:"22.0%"},{y:"2026",n:8.0,v:"8.0%"}],
+ "Physicians Life":[],
+ "First Health (Aetna)":[],
+ "WoodmenLife":[{y:"2025",n:14.0,v:"14.0%"}],
+ "Bankers Life (Washington National)":[{y:"2025",n:5.4,v:"5.4% (GA)"}],
+ "Mutual of Omaha":[{y:"2024",n:7.9,v:"7.9%"},{y:"2025",n:8.8,v:"8.8%"}],
+ "Bankers Fidelity Assurance":[{y:"2024",n:0.0,v:"0.0% (PA/VA)"},{y:"2025",n:2.0,v:"2.0% (SC)"}],
+ "Everence Association":[{y:"2026",n:11.9,v:"11.9% (MI)"}],
+ "United American (Globe Life)":[{y:"2024",n:4.7,v:"4.7%"},{y:"2025",n:6.6,v:"6.6%"},{y:"2026",n:15.0,v:"15.0% (MI)"}],
+ "Wisconsin Physicians Service (WPS)":[{y:"2024",n:15.2,v:"15.2% (IL/OH)"},{y:"2025",n:5.4,v:"5.4% (MO)"}],
+ "Guarantee Trust Life":[],
+ "GPM Health and Life":[{y:"2025",n:18.6,v:"18.6%"},{y:"2026",n:13.8,v:"13.8%"}],
+};
+
 const TOP3 = [
  {name:"Blue Cross Blue Shield of Michigan", best:"Best all-around default for most Michiganders",
   facts:[["Premium","$191/mo"],["Financial","AM Best A"],["Loss ratio","86.3% (healthy)"],["Complaints","0.70 (30% fewer)"],["Recent increases","6.5% in 2024 & 2025"]],
@@ -453,6 +495,14 @@ function ciCls(v){ if(v==null)return"m-na"; if(v<0.8)return"m-good"; if(v<=1.1)r
 function rateCls(v){ if(v==null)return"m-na"; if(v<=0||v<7)return"m-good"; if(v<11)return""; if(v<15)return"m-warn"; return"m-bad"; }
 const tagLabel={mi:"Michigan-based",iss:"Issue-age",mil:"Military only"};
 
+function rateHistHtml(name){
+  const h=RATE_HISTORY[name]||[];
+  const inner = h.length
+    ? `<div class="rh-strip">`+h.map(e=>`<span class="rh-yr"><b>${e.y}</b><span class="${rateCls(e.n)}">${e.v}</span></span>`).join("")+`</div>`
+    : `<div class="rh-na">No Michigan rate-increase history on record for this carrier.</div>`;
+  return `<div class="ratehist"><h4>Rate increases by year</h4>${inner}</div>`;
+}
+
 const tb=document.getElementById("tbody");
 CARRIERS.forEach(c=>{
   const tr=document.createElement("tr"); tr.className="row";
@@ -468,6 +518,7 @@ CARRIERS.forEach(c=>{
   const dt=document.createElement("tr"); dt.className="detail";
   dt.innerHTML=`<td colspan="7"><div class="detail-inner">`+
     `<div class="glance">${c.glance}</div>`+
+    rateHistHtml(c.name)+
     `<div class="pc"><div class="pros"><h4>Pros</h4><ul>${c.pros.map(p=>`<li>${p}</li>`).join("")}</ul></div>`+
     `<div class="cons"><h4>Cons</h4><ul>${c.cons.map(p=>`<li>${p}</li>`).join("")}</ul></div></div></div></td>`;
   tr.addEventListener("click",()=>dt.classList.toggle("open"));
